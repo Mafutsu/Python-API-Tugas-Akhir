@@ -116,6 +116,10 @@ class HybridSearchEngine:
         combined = defaultdict(
             lambda: {
                 "id": None,
+                "nomor": None,
+                "tahun": None,
+                "pasal": None,
+                "ayat": None,
                 "content": None,
                 "hyperlink": [],
                 "bm25_score": 0.0,
@@ -140,6 +144,10 @@ class HybridSearchEngine:
             combined[r["id"]]["bm25_score"] = (
                 r["normalized_score"]
             )
+            combined[r["id"]]["nomor"] = r["nomor"]
+            combined[r["id"]]["tahun"] = r["tahun"]
+            combined[r["id"]]["pasal"] = r["pasal"]
+            combined[r["id"]]["ayat"] = r["ayat"]
 
         # SBERT contribution
         for r in sbert_results:
@@ -157,6 +165,10 @@ class HybridSearchEngine:
             combined[r["id"]]["sbert_score"] = (
                 r["normalized_score"]
             )
+            combined[r["id"]]["nomor"] = r["nomor"]
+            combined[r["id"]]["tahun"] = r["tahun"]
+            combined[r["id"]]["pasal"] = r["pasal"]
+            combined[r["id"]]["ayat"] = r["ayat"]
 
         # HYBRID SCORE
         final_results = []
