@@ -144,10 +144,10 @@ class HybridSearchEngine:
             combined[r["id"]]["bm25_score"] = (
                 r["normalized_score"]
             )
-            combined[r["id"]]["nomor"] = r["nomor"]
-            combined[r["id"]]["tahun"] = r["tahun"]
-            combined[r["id"]]["pasal"] = r["pasal"]
-            combined[r["id"]]["ayat"] = r["ayat"]
+            combined[r["id"]]["nomor"] = r.get("nomor")
+            combined[r["id"]]["tahun"] = r.get("tahun")
+            combined[r["id"]]["pasal"] = r.get("pasal")
+            combined[r["id"]]["ayat"] = r.get("ayat")
 
         # SBERT contribution
         for r in sbert_results:
@@ -165,10 +165,10 @@ class HybridSearchEngine:
             combined[r["id"]]["sbert_score"] = (
                 r["normalized_score"]
             )
-            combined[r["id"]]["nomor"] = r["nomor"]
-            combined[r["id"]]["tahun"] = r["tahun"]
-            combined[r["id"]]["pasal"] = r["pasal"]
-            combined[r["id"]]["ayat"] = r["ayat"]
+            combined[r["id"]]["nomor"] = r.get("nomor")
+            combined[r["id"]]["tahun"] = r.get("tahun")
+            combined[r["id"]]["pasal"] = r.get("pasal")
+            combined[r["id"]]["ayat"] = r.get("ayat")
 
         # HYBRID SCORE
         final_results = []
