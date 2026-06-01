@@ -173,9 +173,9 @@ class SBERTSearchEngine:
 
             self.load_index()
 
-        else:
+        # else:
 
-            self.build_index()
+        #     self.build_index()
 
     # =========================
     # SEARCH
