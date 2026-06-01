@@ -17,7 +17,7 @@ class SBERTSearchEngine:
         data_path,
         index_path,
         metadata_path,
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
+        model_name="paraphrase-multilingual-MiniLM-L12-v2"
     ):
 
         self.data_path = data_path
