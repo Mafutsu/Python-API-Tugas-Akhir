@@ -40,7 +40,7 @@ sbert_engine = SBERTSearchEngine(
     index_path=INDEX_PATH,
     metadata_path=METADATA_PATH
 )
-
+print("STEP 6")
 engine = HybridSearchEngine(
     bm25_engine,
     sbert_engine
