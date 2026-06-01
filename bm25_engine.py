@@ -73,11 +73,11 @@ class BM25Engine:
                 continue
             else:
                 doc = self.documents[idx]
-                print(
-                    f"[ACCEPT] "
-                    f"{doc['id']} | "
-                    f"score={score:.4f}"
-                )
+                # print(
+                #     f"[ACCEPT] "
+                #     f"{doc['id']} | "
+                #     f"score={score:.4f}"
+                # )
 
                 
 

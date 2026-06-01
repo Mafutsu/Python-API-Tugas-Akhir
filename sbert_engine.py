@@ -208,10 +208,10 @@ class SBERTSearchEngine:
 
         results = []
 
-        print("\n====================")
-        print("SBERT DEBUG")
-        print("QUERY :", query)
-        print("====================")
+        # print("\n====================")
+        # print("SBERT DEBUG")
+        # print("QUERY :", query)
+        # print("====================")
 
         for rank, (score, idx) in enumerate(
             zip(scores[0][:10], indices[0][:10]),
@@ -220,13 +220,13 @@ class SBERTSearchEngine:
 
             doc = self.metadata[idx]
 
-            print(
-                f"#{rank} | "
-                f"{doc['id']} | "
-                f"score={float(score):.4f}"
-            )
+        #     print(
+        #         f"#{rank} | "
+        #         f"{doc['id']} | "
+        #         f"score={float(score):.4f}"
+        #     )
 
-        print("====================\n")
+        # print("====================\n")
 
         for score, idx in zip(
             scores[0],
