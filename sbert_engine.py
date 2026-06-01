@@ -6,6 +6,8 @@ import faiss
 import numpy as np
 
 from sentence_transformers import SentenceTransformer
+from utils import preprocess
+from utils import preprocess_sbert
 
 
 class SBERTSearchEngine:
@@ -15,7 +17,7 @@ class SBERTSearchEngine:
         data_path,
         index_path,
         metadata_path,
-        model_name="all-MiniLM-L6-v2"
+        model_name="paraphrase-multilingual-MiniLM-L12-v2"
     ):
 
         self.data_path = data_path
@@ -76,7 +78,7 @@ class SBERTSearchEngine:
 
         for doc in documents:
 
-            texts.append(doc["content"])
+            texts.append(preprocess_sbert(doc["content"]))
 
             metadata.append({
                 "id": doc["id"],
@@ -184,6 +186,8 @@ class SBERTSearchEngine:
         top_k=20
     ):
 
+        query = preprocess_sbert(query)
+
         query_embedding = self.model.encode(
             [query]
         )
@@ -200,23 +204,53 @@ class SBERTSearchEngine:
             top_k
         )
 
+        MIN_SBERT_SCORE = 0.5
+
         results = []
+
+        print("\n====================")
+        print("SBERT DEBUG")
+        print("QUERY :", query)
+        print("====================")
+
+        for rank, (score, idx) in enumerate(
+            zip(scores[0][:10], indices[0][:10]),
+            start=1
+        ):
+
+            doc = self.metadata[idx]
+
+            print(
+                f"#{rank} | "
+                f"{doc['id']} | "
+                f"score={float(score):.4f}"
+            )
+
+        print("====================\n")
 
         for score, idx in zip(
             scores[0],
             indices[0]
         ):
 
-            doc = self.metadata[idx]
+            if score < MIN_SBERT_SCORE:
+                continue
+            
+            else:
+                doc = self.metadata[idx]
 
-            results.append({
-                "id": doc["id"],
-                "content": doc["content"],
-                "hyperlink": doc.get(
-                    "hyperlink",
-                    []
-                ),
-                "score": float(score)
+                results.append({
+                    "id": doc["id"],
+                    "nomor": doc.get("nomor"),
+                    "tahun": doc.get("tahun"),
+                    "pasal": doc.get("pasal"),
+                    "ayat": doc.get("ayat"),
+                    "content": doc["content"],
+                    "hyperlink": doc.get(
+                        "hyperlink",
+                        []
+                    ),
+                    "score": float(score)
             })
 
         return results

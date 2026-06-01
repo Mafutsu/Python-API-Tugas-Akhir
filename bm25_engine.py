@@ -60,22 +60,37 @@ class BM25Engine:
 
         scores = self.bm25.get_scores(tokenized_query)
 
+        max_score = max(scores)
+
+        # hanya ambil dokumen dengan skor >= 10% dari skor tertinggi
+        threshold = max_score * 0.1
+
         results = []
 
         for idx, score in enumerate(scores):
 
-            doc = self.documents[idx]
+            if score < threshold or score == 0:
+                continue
+            else:
+                doc = self.documents[idx]
+                print(
+                    f"[ACCEPT] "
+                    f"{doc['id']} | "
+                    f"score={score:.4f}"
+                )
 
-            results.append({
-                "id": doc["id"],
-                "nomor": doc.get("nomor"),
-                "tahun": doc.get("tahun"),
-                "pasal": doc.get("pasal"),
-                "ayat": doc.get("ayat"),
-                "content": doc["content"],
-                "hyperlink": doc.get("hyperlink", []),
-                "score": float(score)
-            })
+                
+
+                results.append({
+                    "id": doc["id"],
+                    "nomor": doc.get("nomor"),
+                    "tahun": doc.get("tahun"),
+                    "pasal": doc.get("pasal"),
+                    "ayat": doc.get("ayat"),
+                    "content": doc["content"],
+                    "hyperlink": doc.get("hyperlink", []),
+                    "score": float(score)
+                })
 
         # sort descending
         results = sorted(

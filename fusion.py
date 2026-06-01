@@ -61,20 +61,16 @@ class HybridSearchEngine:
 
         tokens = query.split()
 
-        # keyword-heavy
-        if len(tokens) <= 3:
+        if len(tokens) == 1:
+            return 0.9, 0.1
 
-            return 0.7, 0.3
-
-        # balanced
-        elif len(tokens) <= 8:
-
-            return 0.5, 0.5
-
-        # semantic-heavy
-        else:
-
+        elif len(tokens) <= 3:
             return 0.3, 0.7
+
+        elif len(tokens) <= 8:
+            return 0.2, 0.8
+        else:
+            return 0.1, 0.9
 
     # HYBRID SEARCH
     def search(
@@ -190,9 +186,9 @@ class HybridSearchEngine:
             )
 
             # citation boost
-            citation_boost = (
-                len(item["hyperlink"])
-                * 0.02
+            citation_boost = min(
+                len(item["hyperlink"]) * 0.005,
+                0.05
             )
 
             final_score = (
