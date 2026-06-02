@@ -16,7 +16,7 @@ METADATA_PATH = "index/metadata.pkl"
 # =========================
 # LOAD ENGINES
 # =========================
-@st.cache_resource
+# @st.cache_resource
 def load_engines():
 
     bm25_engine = BM25Engine(

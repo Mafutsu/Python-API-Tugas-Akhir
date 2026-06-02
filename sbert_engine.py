@@ -5,6 +5,7 @@ import pickle
 import faiss
 import numpy as np
 
+import torch
 from sentence_transformers import SentenceTransformer
 from utils import preprocess
 from utils import preprocess_sbert
@@ -17,7 +18,8 @@ class SBERTSearchEngine:
         data_path,
         index_path,
         metadata_path,
-        model_name="paraphrase-multilingual-MiniLM-L12-v2"
+        model_name="paraphrase-multilingual-MiniLM-L12-v2",
+        model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": True}
     ):
 
         self.data_path = data_path
@@ -47,7 +49,7 @@ class SBERTSearchEngine:
     def load_model(self):
 
         self.model = SentenceTransformer(
-            self.model_name
+            self.model_name, self.model_kwargs
         )
 
     # =========================
