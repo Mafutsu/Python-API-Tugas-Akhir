@@ -52,7 +52,16 @@ class SBERTSearchEngine:
 
             self.model = SentenceTransformer(
                 self.model_name,
-                self.model_kwargs
+                model_kwargs=self.model_kwargs
+            )
+            import psutil
+            import os
+
+            process = psutil.Process(os.getpid())
+
+            print(
+                f"RAM after model load: "
+                f"{process.memory_info().rss / 1024 / 1024:.2f} MB"
             )
 
             print("SBERT model loaded.")

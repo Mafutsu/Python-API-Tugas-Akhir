@@ -66,4 +66,4 @@ tzdata==2025.3
 urllib3==2.6.3
 uvicorn==0.48.0
 Sastrawi==1.0.1
- 
+psutil==7.1.1

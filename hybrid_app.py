@@ -1,4 +1,4 @@
-# import streamlit as st
+import streamlit as st
 
 from bm25_engine import BM25Engine
 from sbert_engine import SBERTSearchEngine
@@ -16,7 +16,7 @@ METADATA_PATH = "index/metadata.pkl"
 # =========================
 # LOAD ENGINES
 # =========================
-# @st.cache_resource
+@st.cache_resource
 def load_engines():
 
     bm25_engine = BM25Engine(
@@ -41,82 +41,82 @@ engine = load_engines()
 # # =========================
 # # UI
 # # =========================
-# st.title(
-#     "Hybrid Search Engine Hukum"
-# )
+st.title(
+    "Hybrid Search Engine Hukum"
+)
 
-# query = st.text_input(
-#     "Masukkan query pencarian:"
-# )
+query = st.text_input(
+    "Masukkan query pencarian:"
+)
 
-# if st.button("Search"):
+if st.button("Search"):
 
-#     results = engine.search(query)
+    results = engine.search(query)
 
-#     st.success(
-#         f"Ditemukan {len(results)} hasil"
-#     )
+    st.success(
+        f"Ditemukan {len(results)} hasil"
+    )
 
-#     for result in results:
+    for result in results:
 
-#         st.markdown("---")
+        st.markdown("---")
 
-#         title = f"UU No.{result.get('nomor')} Tahun {result.get('tahun')}"
+        title = f"UU No.{result.get('nomor')} Tahun {result.get('tahun')}"
 
-#         pasal = result.get("pasal")
-#         ayat = result.get("ayat")
+        pasal = result.get("pasal")
+        ayat = result.get("ayat")
 
-#         if pasal not in [None, "", "-"]:
-#             title += f" Pasal {pasal}"
+        if pasal not in [None, "", "-"]:
+            title += f" Pasal {pasal}"
 
-#         if ayat not in [None, "", "-"]:
-#             title += f" Ayat {ayat}"
+        if ayat not in [None, "", "-"]:
+            title += f" Ayat {ayat}"
 
-#         st.subheader(title)
+        st.subheader(title)
 
-#         st.write(
-#             f"Hybrid Score: "
-#             f"{round(result['hybrid_score'], 4)}"
-#         )
+        st.write(
+            f"Hybrid Score: "
+            f"{round(result['hybrid_score'], 4)}"
+        )
 
-#         st.write(
-#             f"BM25: "
-#             f"{round(result['bm25_score'], 4)}"
-#         )
+        st.write(
+            f"BM25: "
+            f"{round(result['bm25_score'], 4)}"
+        )
 
-#         st.write(
-#             f"SBERT: "
-#             f"{round(result['sbert_score'], 4)}"
-#         )
+        st.write(
+            f"SBERT: "
+            f"{round(result['sbert_score'], 4)}"
+        )
 
-#         st.write(result["content"])
+        st.write(result["content"])
 
-#         # =========================
-#         # HYPERLINK
-#         # =========================
-#         if result["hyperlink"]:
+        # =========================
+        # HYPERLINK
+        # =========================
+        if result["hyperlink"]:
 
-#             st.markdown(
-#                 "### Pasal Terkait"
-#             )
+            st.markdown(
+                "### Pasal Terkait"
+            )
 
-#             for link in result["hyperlink"]:
+            for link in result["hyperlink"]:
 
-#                 linked_doc = (
-#                     engine
-#                     .bm25_engine
-#                     .doc_lookup
-#                     .get(link)
-#                 )
+                linked_doc = (
+                    engine
+                    .bm25_engine
+                    .doc_lookup
+                    .get(link)
+                )
 
-#                 if linked_doc:
+                if linked_doc:
 
-#                     with st.expander(
-#                         f"🔗 {link}"
-#                     ):
+                    with st.expander(
+                        f"🔗 {link}"
+                    ):
 
-#                         st.write(
-#                             linked_doc[
-#                                 "content"
-#                             ]
-#                         )
+                        st.write(
+                            linked_doc[
+                                "content"
+                            ]
+                        )
