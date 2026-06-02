@@ -39,9 +39,6 @@ class SBERTSearchEngine:
 
         self.doc_lookup = {}
 
-        # load everything
-        self.load_model()
-
         self.load_or_build_index()
 
     # =========================
@@ -49,9 +46,16 @@ class SBERTSearchEngine:
     # =========================
     def load_model(self):
 
-        self.model = SentenceTransformer(
-            self.model_name, self.model_kwargs
-        )
+        if self.model is None:
+
+            print("Loading SBERT model...")
+
+            self.model = SentenceTransformer(
+                self.model_name,
+                self.model_kwargs
+            )
+
+            print("SBERT model loaded.")
 
     # =========================
     # LOAD DATASET
@@ -188,7 +192,7 @@ class SBERTSearchEngine:
         query,
         top_k=20
     ):
-
+        self.load_model()
         query = preprocess_sbert(query)
 
         query_embedding = self.model.encode(
