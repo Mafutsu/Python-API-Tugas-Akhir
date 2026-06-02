@@ -19,7 +19,6 @@ class SBERTSearchEngine:
         index_path,
         metadata_path,
         model_name="paraphrase-multilingual-MiniLM-L12-v2",
-        model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": True}
     ):
 
         self.data_path = data_path
@@ -29,6 +28,8 @@ class SBERTSearchEngine:
         self.metadata_path = metadata_path
 
         self.model_name = model_name
+
+        self.model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": True}
 
         self.model = None
 
