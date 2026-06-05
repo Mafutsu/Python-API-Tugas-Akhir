@@ -5,10 +5,7 @@ import pickle
 import faiss
 import numpy as np
 
-import torch
 from sentence_transformers import SentenceTransformer
-from utils import preprocess
-from utils import preprocess_sbert
 
 
 class SBERTSearchEngine:
@@ -18,7 +15,7 @@ class SBERTSearchEngine:
         data_path,
         index_path,
         metadata_path,
-        model_name="paraphrase-multilingual-MiniLM-L6-v2",
+        model_name="all-MiniLM-L6-v2"
     ):
 
         self.data_path = data_path
@@ -29,8 +26,6 @@ class SBERTSearchEngine:
 
         self.model_name = model_name
 
-        self.model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": True}
-
         self.model = None
 
         self.index = None
@@ -39,6 +34,9 @@ class SBERTSearchEngine:
 
         self.doc_lookup = {}
 
+        # load everything
+        self.load_model()
+
         self.load_or_build_index()
 
     # =========================
@@ -46,17 +44,9 @@ class SBERTSearchEngine:
     # =========================
     def load_model(self):
 
-        if self.model is None:
-
-            print("Loading SBERT model...")
-
-            self.model = SentenceTransformer(
-                self.model_name,
-                model_kwargs=self.model_kwargs
-            )
-            
-
-            print("SBERT model loaded.")
+        self.model = SentenceTransformer(
+            self.model_name
+        )
 
     # =========================
     # LOAD DATASET
@@ -86,7 +76,7 @@ class SBERTSearchEngine:
 
         for doc in documents:
 
-            texts.append(preprocess_sbert(doc["content"]))
+            texts.append(doc["content"])
 
             metadata.append({
                 "id": doc["id"],
@@ -193,8 +183,6 @@ class SBERTSearchEngine:
         query,
         top_k=20
     ):
-        self.load_model()
-        query = preprocess_sbert(query)
 
         query_embedding = self.model.encode(
             [query]
@@ -212,53 +200,24 @@ class SBERTSearchEngine:
             top_k
         )
 
-        MIN_SBERT_SCORE = 0.5
-
         results = []
-
-        # print("\n====================")
-        # print("SBERT DEBUG")
-        # print("QUERY :", query)
-        # print("====================")
-
-        for rank, (score, idx) in enumerate(
-            zip(scores[0][:10], indices[0][:10]),
-            start=1
-        ):
-
-            doc = self.metadata[idx]
-
-        #     print(
-        #         f"#{rank} | "
-        #         f"{doc['id']} | "
-        #         f"score={float(score):.4f}"
-        #     )
-
-        # print("====================\n")
 
         for score, idx in zip(
             scores[0],
             indices[0]
         ):
 
-            if score < MIN_SBERT_SCORE:
-                continue
-            
-            else:
-                doc = self.metadata[idx]
+            doc = self.metadata[idx]
 
-                results.append({
-                    "id": doc["id"],
-                    "nomor": doc.get("nomor"),
-                    "tahun": doc.get("tahun"),
-                    "pasal": doc.get("pasal"),
-                    "ayat": doc.get("ayat"),
-                    "content": doc["content"],
-                    "hyperlink": doc.get(
-                        "hyperlink",
-                        []
-                    ),
-                    "score": float(score)
+            results.append({
+                "id": doc["id"],
+                "nomor": doc.get("nomor"),
+                "tahun": doc.get("tahun"),
+                "pasal": doc.get("pasal"),
+                "ayat": doc.get("ayat"),
+                "content": doc["content"],
+                "hyperlink": doc.get("hyperlink", []),
+                "score": float(score)
             })
 
         return results

@@ -61,16 +61,19 @@ class HybridSearchEngine:
 
         tokens = query.split()
 
-        if len(tokens) == 1:
-            return 0.9, 0.1
+        if len(tokens) <= 3:
 
-        elif len(tokens) <= 3:
-            return 0.3, 0.7
+            return 0.7, 0.3
 
+        # balanced
         elif len(tokens) <= 8:
-            return 0.2, 0.8
+
+            return 0.5, 0.5
+
+        # semantic-heavy
         else:
-            return 0.1, 0.9
+
+            return 0.3, 0.7
 
     # HYBRID SEARCH
     def search(
