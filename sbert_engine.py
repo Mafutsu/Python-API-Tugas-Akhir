@@ -18,7 +18,7 @@ class SBERTSearchEngine:
         data_path,
         index_path,
         metadata_path,
-        model_name="paraphrase-multilingual-MiniLM-L12-v2",
+        model_name="paraphrase-multilingual-MiniLM-L6-v2",
     ):
 
         self.data_path = data_path
@@ -54,15 +54,7 @@ class SBERTSearchEngine:
                 self.model_name,
                 model_kwargs=self.model_kwargs
             )
-            import psutil
-            import os
-
-            process = psutil.Process(os.getpid())
-
-            print(
-                f"RAM after model load: "
-                f"{process.memory_info().rss / 1024 / 1024:.2f} MB"
-            )
+            
 
             print("SBERT model loaded.")
 
